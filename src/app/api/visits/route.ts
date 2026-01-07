@@ -35,10 +35,12 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const hostelName = searchParams.get('hostelName');
 
+    type RequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT';
+    
     const whereClause: {
       parentId?: string;
       student?: { hostelName: string };
-      status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT' | { in: Array<'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT'> };
+      status?: RequestStatus | { in: RequestStatus[] };
     } = {};
 
     // Filter based on user role
@@ -47,13 +49,13 @@ export async function GET(request: NextRequest) {
     } else if (user.role === 'WARDEN') {
       // Wardens should only see visits that have been scanned by security (INSIDE status)
       whereClause.status = {
-        in: ['INSIDE', 'APPROVED', 'OUT']
+        in: ['INSIDE', 'APPROVED', 'OUT'] as RequestStatus[]
       };
     }
 
     // Add status filter if provided
-    if (status) {
-      whereClause.status = status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT';
+    if (status && ['PENDING', 'APPROVED', 'REJECTED', 'INSIDE', 'OUT'].includes(status)) {
+      whereClause.status = status as RequestStatus;
     }
 
 
