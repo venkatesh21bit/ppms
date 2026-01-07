@@ -35,7 +35,11 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const hostelName = searchParams.get('hostelName');
 
-  const whereClause: Record<string, unknown> = {};
+    const whereClause: {
+      parentId?: string;
+      student?: { hostelName: string };
+      status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT' | { in: Array<'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT'> };
+    } = {};
 
     // Filter based on user role
     if (user.role === 'PARENT') {
@@ -49,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     // Add status filter if provided
     if (status) {
-      whereClause.status = status;
+      whereClause.status = status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'INSIDE' | 'OUT';
     }
 
 
