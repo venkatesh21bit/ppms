@@ -9,7 +9,7 @@ async function setupWardens() {
 
     // Check existing wardens
     const existingWardens = await prisma.user.findMany({
-      where: { role: 'HOSTEL_WARDEN' }
+      where: { role: 'WARDEN' }
     });
 
     console.log(`Found ${existingWardens.length} existing warden(s)\n`);
@@ -18,20 +18,17 @@ async function setupWardens() {
       {
         email: 'agasthya.warden@college.edu',
         password: 'warden123',
-        name: 'Agasthya Bhavanam Warden',
-        hostelName: 'Agasthya Bhavanam'
+        name: 'Agasthya Bhavanam Warden'
       },
       {
         email: 'vasishta.warden@college.edu',
         password: 'warden123',
-        name: 'Vasishta Bhavanam Warden',
-        hostelName: 'Vasishta Bhavanam'
+        name: 'Vasishta Bhavanam Warden'
       },
       {
         email: 'gautama.warden@college.edu',
         password: 'warden123',
-        name: 'Gautama Bhavanam Warden',
-        hostelName: 'Gautama Bhavanam'
+        name: 'Gautama Bhavanam Warden'
       }
     ];
 
@@ -52,15 +49,13 @@ async function setupWardens() {
           email: warden.email,
           password: hashedPassword,
           name: warden.name,
-          role: 'HOSTEL_WARDEN',
-          hostelName: warden.hostelName
+          role: 'WARDEN'
         }
       });
 
       console.log(`✓ Created ${warden.name}`);
       console.log(`  Email: ${warden.email}`);
-      console.log(`  Password: ${warden.password}`);
-      console.log(`  Hostel: ${warden.hostelName}\n`);
+      console.log(`  Password: ${warden.password}\n`);
     }
 
     console.log('\n✅ All wardens are set up!');
